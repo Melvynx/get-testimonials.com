@@ -1,5 +1,6 @@
 import { requiredCurrentUser } from "@/auth/current-user";
 import { Layout, LayoutTitle } from "@/components/layout";
+import { buttonVariants } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   Table,
@@ -24,7 +25,15 @@ export default async function RoutePage(props: PageParams<{}>) {
 
   return (
     <Layout>
-      <LayoutTitle>Products</LayoutTitle>
+      <div className="flex justify-between">
+        <LayoutTitle>Products</LayoutTitle>
+        <Link
+          href={`/products/new`}
+          className={buttonVariants({ size: "sm", variant: "secondary" })}
+        >
+          Create
+        </Link>
+      </div>
       <Card className="p-4">
         {products.length ? (
           <Table>

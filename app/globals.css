@@ -57,3 +57,43 @@
     @apply bg-background text-foreground;
   }
 }
+
+.citation {
+  position: relative;
+  display: inline-block;
+  padding: 4px;
+  border-radius: 0.5rem;
+  background: hsl(var(--foreground) / 0.1);
+  color: var(--foreground);
+  font-style: italic;
+  font-family: var(--font-citation);
+  --gap: -16px;
+}
+
+.citation::before {
+  content: "“";
+  font-size: 3rem;
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  line-height: 1;
+  color: hsl(var(--primary));
+}
+
+.citation::after {
+  content: "”";
+  font-size: 3rem;
+  position: absolute;
+  bottom: -16px;
+  right: -4px;
+  line-height: 1;
+  color: hsl(var(--primary));
+}
+
+.citation b {
+  font-weight: 700;
+  background: hsl(var(--primary) / 0.5);
+  display: inline;
+  padding: 2px;
+  margin: -2px;
+}

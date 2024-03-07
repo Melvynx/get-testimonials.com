@@ -150,7 +150,8 @@ Criteria:
 - You USE THE SAME language and tone as the customer used in the audio review.
 
 Response format:
-- Return the plain text content review, without title or any other information.`,
+- Return the plain text content review, without title or any other information.
+- Use THE SAME LANGUAGE as the user used in the audio review.`,
         },
         {
           role: "user",

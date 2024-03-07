@@ -46,12 +46,13 @@ model VerificationToken {
 // App models
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  plan          Plan      @default(FREE)
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  plan             Plan      @default(FREE)
+  stripeCustomerId String?
 
   accounts Account[]
   sessions Session[]

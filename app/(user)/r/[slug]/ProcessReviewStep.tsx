@@ -142,7 +142,7 @@ export const ProcessReviewStep = ({ product }: { product: Product }) => {
         )}
         {step === 2 && (
           <motion.div
-            key="step-1"
+            key="step-2"
             exit={{
               opacity: 0,
               x: -100,
@@ -161,13 +161,20 @@ export const ProcessReviewStep = ({ product }: { product: Product }) => {
               {product.reviewText ??
                 "Tell me what you liked and what you disliked?"}
             </h2>
-            <ReviewTextSelector productId={product.id} />
+            <ReviewTextSelector
+              onInputSend={(i) => {
+                updateData({
+                  text: i,
+                });
+              }}
+              productId={product.id}
+            />
           </motion.div>
         )}
 
         {step === 3 && (
           <motion.div
-            key="step-1"
+            key="step-3"
             exit={{
               opacity: 0,
               x: -100,

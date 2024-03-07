@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import { useLocalStorage } from "react-use";
@@ -10,6 +11,7 @@ import { processAudioAction } from "./reviews.action";
 
 export type ReviewTextSelectorProps = {
   productId: string;
+  onInputSend: (input: string) => void;
 };
 
 export const ReviewTextSelector = (props: ReviewTextSelectorProps) => {
@@ -30,14 +32,18 @@ export const ReviewTextSelector = (props: ReviewTextSelectorProps) => {
           </p>
         </TabsContent>
         <TabsContent value="text">
-          <InputControl />
+          <InputControl onInputSend={props.onInputSend} />
         </TabsContent>
       </Tabs>
     </div>
   );
 };
 
-const InputControl = ({}) => {
+const InputControl = ({
+  onInputSend,
+}: {
+  onInputSend: (input: string) => void;
+}) => {
   const [input, setInput] = useState("");
   return (
     <div className="flex flex-col gap-2">
@@ -47,7 +53,13 @@ const InputControl = ({}) => {
         value={input}
         onChange={(e) => setInput(e.target.value)}
       />
-      <Button variant="default" size="sm" onClick={() => console.log(input)}>
+      <Button
+        variant="default"
+        size="sm"
+        onClick={() => {
+          onInputSend(input);
+        }}
+      >
         Submit
       </Button>
     </div>
@@ -133,6 +145,7 @@ const AudioRecorderControl = ({
             mutation.mutate();
           }}
         >
+          {mutation.isPending ? <Loader2 className="h-6 animate-spin" /> : null}
           Submit
         </Button>
       ) : null}

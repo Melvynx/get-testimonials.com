@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -24,6 +24,7 @@ import {
 import { uploadImageAction } from "@/features/upload/upload.action";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
+import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { createProductAction, updateProductAction } from "./product.action";
@@ -61,6 +62,7 @@ export const ProductForm = (props: ProductFormProps) => {
       }
 
       router.push(`/products/${data.id}`);
+      router.refresh();
     },
   });
 
@@ -146,8 +148,12 @@ export const ProductForm = (props: ProductFormProps) => {
                       }}
                     />
                   </FormControl>
+                  {submitImage.isPending ? (
+                    <Loader2 className="h-6 animate-spin" />
+                  ) : null}
                   {field.value ? (
-                    <Avatar>
+                    <Avatar className="rounded-sm">
+                      <AvatarFallback>{field.value[0]}</AvatarFallback>
                       <AvatarImage src={field.value} />
                     </Avatar>
                   ) : null}

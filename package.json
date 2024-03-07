@@ -52,6 +52,7 @@
     "react-twc": "^1.4.1",
     "react-use": "^17.5.0",
     "sonner": "^1.4.3",
+    "stripe": "^14.19.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4"
