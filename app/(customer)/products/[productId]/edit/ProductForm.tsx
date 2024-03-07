@@ -1,5 +1,6 @@
 "use client";
 
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -20,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { uploadImageAction } from "@/features/upload/upload.action";
 import { cn } from "@/lib/utils";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -58,8 +60,23 @@ export const ProductForm = (props: ProductFormProps) => {
         return;
       }
 
-      toast.success("Product created");
       router.push(`/products/${data.id}`);
+    },
+  });
+
+  const submitImage = useMutation({
+    mutationFn: async (file: File) => {
+      const formData = new FormData();
+      formData.set("file", file);
+      const { data, serverError } = await uploadImageAction(formData);
+
+      if (!data || serverError) {
+        toast.error(serverError);
+        return;
+      }
+
+      const url = data.url;
+      form.setValue("image", url);
     },
   });
 
@@ -89,6 +106,52 @@ export const ProductForm = (props: ProductFormProps) => {
                 <FormControl>
                   <Input placeholder="iPhone 15" {...field} />
                 </FormControl>
+                <FormDescription>
+                  The name of the product to review
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Image</FormLabel>
+
+                <div className="flex items-center gap-4">
+                  <FormControl className="flex-1">
+                    <Input
+                      type="file"
+                      placeholder="iPhone 15"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+
+                        if (!file) {
+                          return;
+                        }
+
+                        if (file.size > 1024 * 1024) {
+                          toast.error("File is too big");
+                          return;
+                        }
+
+                        if (!file.type.includes("image")) {
+                          toast.error("File is not an image");
+                          return;
+                        }
+
+                        submitImage.mutate(file);
+                      }}
+                    />
+                  </FormControl>
+                  {field.value ? (
+                    <Avatar>
+                      <AvatarImage src={field.value} />
+                    </Avatar>
+                  ) : null}
+                </div>
                 <FormDescription>
                   The name of the product to review
                 </FormDescription>

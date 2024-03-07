@@ -70,6 +70,7 @@ model Product {
   id              String  @id @default(cuid())
   slug            String  @unique
   name            String
+  image           String?
   noteText        String?
   informationText String?
   reviewText      String?
