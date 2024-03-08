@@ -27,7 +27,7 @@ export const upgradeToPremium = userAction(z.string(), async (_, context) => {
         price:
           env.NODE_ENV === "development"
             ? "price_1OrgHYFKmC0h3QzIMrtIylk9"
-            : "",
+            : "price_1OrgHYFKmC0h3QzIMrtIylk9",
         quantity: 1,
       },
     ],
