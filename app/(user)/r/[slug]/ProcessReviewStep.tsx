@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import { useLocalStorage } from "react-use";
 import { toast } from "sonner";
-import RatingSelector from "./ReviewSelector";
+import RatingSelector from "./RatingSelector";
 import { ReviewTextSelector } from "./ReviewTextSelector";
 import { SocialSelector } from "./SocialSelector";
 import { ReviewType } from "./review.schema";
@@ -37,6 +37,7 @@ export const ProcessReviewStep = ({ product }: { product: Product }) => {
   >(`review-id-${product.id}`, null);
 
   const queryClient = useQueryClient();
+
   const reviewData = useQuery({
     queryKey: ["review", reviewId, "product", product.id],
     enabled: Boolean(reviewId),

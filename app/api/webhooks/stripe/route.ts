@@ -1,8 +1,12 @@
+import { EMAIL_FROM } from "@/config";
 import { env } from "@/env";
 import { prisma } from "@/prisma";
+import { resend } from "@/resend";
 import { stripe } from "@/stripe";
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import DowngradeEmail from "../../../../emails/DowngradeEmail";
+import PremiumEmail from "../../../../emails/PremiumEmail";
 
 export const POST = async (req: NextRequest) => {
   const body = await req.text();
@@ -42,6 +46,13 @@ export const POST = async (req: NextRequest) => {
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    await resend.emails.send({
+      from: EMAIL_FROM,
+      to: user.email ?? "",
+      subject: "You are now a premium user",
+      react: PremiumEmail(),
+    });
 
     await prisma.user.update({
       where: {
@@ -90,6 +101,13 @@ export const POST = async (req: NextRequest) => {
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    await resend.emails.send({
+      from: EMAIL_FROM,
+      to: user.email ?? "",
+      subject: "You are now a FREE user",
+      react: DowngradeEmail(),
+    });
 
     await prisma.user.update({
       where: {

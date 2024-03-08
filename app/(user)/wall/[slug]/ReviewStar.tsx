@@ -16,7 +16,7 @@ export const ReviewStar = (props: ReviewStarProps) => {
           <Star
             size={props.size}
             key={i}
-            fill={isFilled ? "currentColor" : "null"}
+            fill={isFilled ? "currentColor" : "transparent"}
           />
         );
       })}

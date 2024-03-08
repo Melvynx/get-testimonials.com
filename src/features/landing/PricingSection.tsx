@@ -12,29 +12,69 @@ import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { PropsWithChildren } from "react";
+import { Section } from "./Section";
 import { upgradeToPremium } from "./upgrade-premium.action";
 
 export const PricingSection = async () => {
   const user = await currentUser();
 
   return (
-    <section className="bg-white dark:bg-gray-900">
-      <div className="mx-auto max-w-screen-xl px-4 py-8 lg:px-6 lg:py-16">
-        <div className="mx-auto mb-8 max-w-screen-md text-center lg:mb-12">
-          <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
-            Increase your testimonials by 2
-          </h2>
-          <p className="mb-5 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
-            We offer a simple plan for everyone.
-          </p>
-        </div>
-        <div className="flex justify-center gap-4 max-lg:flex-col">
-          <PricingCard
-            title="Starter"
-            price={0}
-            description="To try our product"
-            items={["Create 1 product", "Get 10 reviews"]}
+    <Section id="pricing">
+      <div className="mx-auto mb-8 max-w-screen-md text-center lg:mb-12">
+        <h2 className="mb-4 text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">
+          Increase your testimonials by 2
+        </h2>
+        <p className="mb-5 font-light text-gray-500 dark:text-gray-400 sm:text-xl">
+          We offer a simple plan for everyone.
+        </p>
+      </div>
+      <div className="flex justify-center gap-4 max-lg:flex-col">
+        <PricingCard
+          title="Starter"
+          price={0}
+          description="To try our product"
+          items={["Create 1 product", "Get 10 reviews"]}
+        >
+          <Link
+            href="/api/auth/signin"
+            className={cn(
+              buttonVariants({
+                size: "lg",
+                variant: "outline",
+              }),
+              "w-full"
+            )}
           >
+            Sign Up
+          </Link>
+        </PricingCard>
+        <PricingCard
+          title="Premium"
+          price={39}
+          description="For business that want to grow with the best review experience"
+          items={[
+            "Create infinite product",
+            "Get infinite reviews",
+            "Customize your review page",
+            "Customize your colors",
+            "Get a 'wall of reviews'",
+          ]}
+        >
+          {user ? (
+            <form className="w-full">
+              <Button
+                formAction={async () => {
+                  "use server";
+                  await upgradeToPremium("");
+                }}
+                size="lg"
+                variant="default"
+                className="w-full"
+              >
+                Grab it
+              </Button>
+            </form>
+          ) : (
             <Link
               href="/api/auth/signin"
               className={cn(
@@ -47,51 +87,10 @@ export const PricingSection = async () => {
             >
               Sign Up
             </Link>
-          </PricingCard>
-          <PricingCard
-            title="Premium"
-            price={39}
-            description="For business that want to grow with the best review experience"
-            items={[
-              "Create infinite product",
-              "Get infinite reviews",
-              "Customize your review page",
-              "Customize your colors",
-              "Get a 'wall of reviews'",
-            ]}
-          >
-            {user ? (
-              <form>
-                <Button
-                  formAction={async () => {
-                    "use server";
-                    await upgradeToPremium("");
-                  }}
-                  size="lg"
-                  variant="default"
-                  className="w-full"
-                >
-                  Grab it
-                </Button>
-              </form>
-            ) : (
-              <Link
-                href="/api/auth/signin"
-                className={cn(
-                  buttonVariants({
-                    size: "lg",
-                    variant: "outline",
-                  }),
-                  "w-full"
-                )}
-              >
-                Sign Up
-              </Link>
-            )}
-          </PricingCard>
-        </div>
+          )}
+        </PricingCard>
       </div>
-    </section>
+    </Section>
   );
 };
 

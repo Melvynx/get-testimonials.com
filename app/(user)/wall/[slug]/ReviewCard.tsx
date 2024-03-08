@@ -12,7 +12,7 @@ export type ReviewItemProps = {
 export const ReviewItem = ({ review, className }: ReviewItemProps) => {
   return (
     <div className={cn("flex h-fit flex-col", className)}>
-      <div className="flex items-center gap-2">
+      <div className="flex break-inside-avoid-column items-center gap-2">
         {review.image ? (
           <img
             className="size-14 rounded-full"

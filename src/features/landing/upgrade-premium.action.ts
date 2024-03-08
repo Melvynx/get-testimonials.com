@@ -8,6 +8,10 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export const upgradeToPremium = userAction(z.string(), async (_, context) => {
+  if (context.user.plan === "PREMIUM") {
+    throw new ActionError("User is already on premium plan");
+  }
+
   const stripeCustomerId = context.user.stripeCustomerId;
 
   if (!stripeCustomerId) {

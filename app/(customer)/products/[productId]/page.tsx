@@ -15,6 +15,7 @@ import type { PageParams } from "@/types/next";
 import { Link2 } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { DeleteButton } from "./DeleteButton";
 
 export default async function RoutePage(
   props: PageParams<{
@@ -48,7 +49,21 @@ export default async function RoutePage(
 
   return (
     <Layout>
-      <LayoutTitle>{product.name}</LayoutTitle>
+      <div className="flex justify-between">
+        <div className="space-y-0.5">
+          <LayoutTitle>{product.name}</LayoutTitle>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/products/${product.id}/edit`}
+            className={buttonVariants({ size: "sm", variant: "secondary" })}
+          >
+            Edit
+          </Link>
+          <DeleteButton productId={product.id} />
+        </div>
+      </div>
       <div className="flex gap-4 max-lg:flex-col">
         <Card className="flex-1">
           <CardHeader>
@@ -83,8 +98,10 @@ export default async function RoutePage(
           <CardContent>
             <Table>
               <TableHeader>
-                <TableHead>Name</TableHead>
-                <TableHead>Text</TableHead>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Text</TableHead>
+                </TableRow>
               </TableHeader>
               <TableBody>
                 {product.reviews.map((review) => (

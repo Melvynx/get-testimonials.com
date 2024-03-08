@@ -151,7 +151,8 @@ Criteria:
 
 Response format:
 - Return the plain text content review, without title or any other information.
-- Use THE SAME LANGUAGE as the user used in the audio review.`,
+- Use THE SAME LANGUAGE as the user used in the audio review.
+- USE FRENCH !`,
         },
         {
           role: "user",

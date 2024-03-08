@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  .light {
     --background: 0 0% 100%;
     --foreground: 20 14.3% 4.1%;
     --card: 0 0% 100%;
@@ -68,6 +69,7 @@
   font-style: italic;
   font-family: var(--font-citation);
   --gap: -16px;
+  break-inside: avoid-column;
 }
 
 .citation::before {
@@ -78,6 +80,7 @@
   left: -12px;
   line-height: 1;
   color: hsl(var(--primary));
+  break-inside: avoid-column;
 }
 
 .citation::after {
@@ -88,6 +91,7 @@
   right: -4px;
   line-height: 1;
   color: hsl(var(--primary));
+  break-inside: avoid-column;
 }
 
 .citation b {

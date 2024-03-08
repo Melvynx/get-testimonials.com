@@ -1,9 +1,12 @@
 "use server";
 
+import { EMAIL_FROM } from "@/config";
 import { prisma } from "@/prisma";
+import { resend } from "@/resend";
 import { ActionError, userAction } from "@/safe-actions";
 import { User } from "@prisma/client";
 import { z } from "zod";
+import FirstProductCreatedEmail from "../../../../../emails/FirstProductCreatedEmail";
 import { ProductSchema } from "./product.schema";
 
 const verifySlugUniqueness = async (slug: string, productId?: string) => {
@@ -41,6 +44,49 @@ const verifyUserPlan = async (user: User) => {
   }
 };
 
+const sendEmailIfUserCreatedFirstProduct = async (user: User) => {
+  if (user.plan === "PREMIUM") return;
+
+  console.log("PREMIUM PLAN");
+
+  const userProductsCount = await prisma.product.count({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  if (userProductsCount !== 1) {
+    return;
+  }
+
+  console.log("USER COUNT", userProductsCount);
+
+  const product = await prisma.product.findFirst({
+    where: {
+      userId: user.id,
+    },
+    select: {
+      slug: true,
+      name: true,
+    },
+  });
+
+  console.log("poruct", product);
+  if (!product) {
+    return;
+  }
+
+  await resend.emails.send({
+    to: user.email ?? "",
+    subject: "You created your first product",
+    from: EMAIL_FROM,
+    react: FirstProductCreatedEmail({
+      product: product.name,
+      slug: product.slug,
+    }),
+  });
+};
+
 export const createProductAction = userAction(
   ProductSchema,
   async (input, context) => {
@@ -53,6 +99,8 @@ export const createProductAction = userAction(
         userId: context.user.id,
       },
     });
+
+    await sendEmailIfUserCreatedFirstProduct(context.user);
 
     return product;
   }
@@ -75,5 +123,17 @@ export const updateProductAction = userAction(
     });
 
     return updatedProduct;
+  }
+);
+
+export const deleteProductAction = userAction(
+  z.string(),
+  async (productId, context) => {
+    await prisma.product.delete({
+      where: {
+        id: productId,
+        userId: context.user.id,
+      },
+    });
   }
 );

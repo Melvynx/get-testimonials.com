@@ -22,7 +22,7 @@ export const ReviewTextSelector = (props: ReviewTextSelectorProps) => {
           <TabsTrigger value="audio">Audio Note</TabsTrigger>
           <TabsTrigger value="text">Text</TabsTrigger>
         </TabsList>
-        <TabsContent value="audio" className="flex flex-col gap-2">
+        <TabsContent value="audio" className="flex flex-col items-center gap-2">
           <AudioRecorderControl
             productId={props.productId}
             onAudioFinish={(blob) => console.log(blob)}
